@@ -8,13 +8,13 @@ using namespace std;
 #include <comdef.h>
 #include <Wbemidl.h>
 # pragma comment(lib, "wbemuuid.lib")
-
+#pragma optimize("", off)
 #define CRED_MAX_USERNAME_LENGTH            513
 #define CRED_MAX_CREDENTIAL_BLOB_SIZE       512
 #define CREDUI_MAX_USERNAME_LENGTH CRED_MAX_USERNAME_LENGTH
 #define CREDUI_MAX_PASSWORD_LENGTH (CRED_MAX_CREDENTIAL_BLOB_SIZE / 2)
 
-union vector 
+union vector
 {
 	_declspec(align(128)) float x;
 	float f[4];
@@ -48,14 +48,10 @@ void myFunction1(void * dummy) {
 	_endthread();
 
 }
+
 void myFunction2(void * dummy) {
-	system("taskmgr");
-	_endthread();
-}
-void myFunction3(void * dummy) {
-	//    int sekudny = 240;
 	clock_t koniec_czekania;
-	koniec_czekania = clock() + 120 * CLOCKS_PER_SEC;
+	koniec_czekania = clock() + 300 * CLOCKS_PER_SEC;
 
 	union vector a, b, c;
 	a.f[0] = 1; a.f[1] = 2; a.f[2] = 3; a.f[3] = 4;
@@ -138,28 +134,28 @@ int main(int argc, char* argv[])
 
 	if (localconn)
 		hres = CoInitializeSecurity(
-			NULL,
-			-1,                          // COM authentication
-			NULL,                        // Authentication services
-			NULL,                        // Reserved
-			RPC_C_AUTHN_LEVEL_DEFAULT,   // Default authentication
-			RPC_C_IMP_LEVEL_IMPERSONATE, // Default Impersonation
-			NULL,                        // Authentication info
-			EOAC_NONE,                   // Additional capabilities
-			NULL                         // Reserved
-			);
+		NULL,
+		-1,                          // COM authentication
+		NULL,                        // Authentication services
+		NULL,                        // Reserved
+		RPC_C_AUTHN_LEVEL_DEFAULT,   // Default authentication
+		RPC_C_IMP_LEVEL_IMPERSONATE, // Default Impersonation
+		NULL,                        // Authentication info
+		EOAC_NONE,                   // Additional capabilities
+		NULL                         // Reserved
+		);
 	else
 		hres = CoInitializeSecurity(
-			NULL,
-			-1,                          // COM authentication
-			NULL,                        // Authentication services
-			NULL,                        // Reserved
-			RPC_C_AUTHN_LEVEL_DEFAULT,   // Default authentication
-			RPC_C_IMP_LEVEL_IDENTIFY,    // Default Impersonation
-			NULL,                        // Authentication info
-			EOAC_NONE,                   // Additional capabilities
-			NULL                         // Reserved
-			);
+		NULL,
+		-1,                          // COM authentication
+		NULL,                        // Authentication services
+		NULL,                        // Reserved
+		RPC_C_AUTHN_LEVEL_DEFAULT,   // Default authentication
+		RPC_C_IMP_LEVEL_IDENTIFY,    // Default Impersonation
+		NULL,                        // Authentication info
+		EOAC_NONE,                   // Additional capabilities
+		NULL                         // Reserved
+		);
 
 	if (FAILED(hres))
 	{
@@ -192,26 +188,26 @@ int main(int argc, char* argv[])
 
 	if (localconn)
 		hres = pLoc->ConnectServer(
-			_bstr_t(strNetworkResource),      // Object path of WMI namespace
-			NULL,                    // User name. NULL = current user
-			NULL,                    // User password. NULL = current
-			0,                       // Locale. NULL indicates current
-			NULL,                    // Security flags.
-			0,                       // Authority (e.g. Kerberos)
-			0,                       // Context object
-			&pSvc                    // pointer to IWbemServices proxy
-			);
+		_bstr_t(strNetworkResource),      // Object path of WMI namespace
+		NULL,                    // User name. NULL = current user
+		NULL,                    // User password. NULL = current
+		0,                       // Locale. NULL indicates current
+		NULL,                    // Security flags.
+		0,                       // Authority (e.g. Kerberos)
+		0,                       // Context object
+		&pSvc                    // pointer to IWbemServices proxy
+		);
 	else
 		hres = pLoc->ConnectServer(
-			_bstr_t(strNetworkResource),  // Object path of WMI namespace
-			_bstr_t(pszName),             // User name
-			_bstr_t(pszPwd),              // User password
-			NULL,                // Locale
-			NULL,                // Security flags
-			NULL,				 // Authority
-			NULL,                // Context object
-			&pSvc                // IWbemServices proxy
-			);
+		_bstr_t(strNetworkResource),  // Object path of WMI namespace
+		_bstr_t(pszName),             // User name
+		_bstr_t(pszPwd),              // User password
+		NULL,                // Locale
+		NULL,                // Security flags
+		NULL,				 // Authority
+		NULL,                // Context object
+		&pSvc                // IWbemServices proxy
+		);
 
 	if (FAILED(hres))
 	{
@@ -228,15 +224,15 @@ int main(int argc, char* argv[])
 	// Set security levels on the proxy -------------------------
 	if (localconn)
 		hres = CoSetProxyBlanket(
-			pSvc,                        // Indicates the proxy to set
-			RPC_C_AUTHN_WINNT,           // RPC_C_AUTHN_xxx
-			RPC_C_AUTHZ_NONE,            // RPC_C_AUTHZ_xxx
-			NULL,                        // Server principal name
-			RPC_C_AUTHN_LEVEL_CALL,      // RPC_C_AUTHN_LEVEL_xxx
-			RPC_C_IMP_LEVEL_IMPERSONATE, // RPC_C_IMP_LEVEL_xxx
-			NULL,                        // client identity
-			EOAC_NONE                    // proxy capabilities
-			);
+		pSvc,                        // Indicates the proxy to set
+		RPC_C_AUTHN_WINNT,           // RPC_C_AUTHN_xxx
+		RPC_C_AUTHZ_NONE,            // RPC_C_AUTHZ_xxx
+		NULL,                        // Server principal name
+		RPC_C_AUTHN_LEVEL_CALL,      // RPC_C_AUTHN_LEVEL_xxx
+		RPC_C_IMP_LEVEL_IMPERSONATE, // RPC_C_IMP_LEVEL_xxx
+		NULL,                        // client identity
+		EOAC_NONE                    // proxy capabilities
+		);
 	else
 	{
 		// Create COAUTHIDENTITY that can be used for setting security on proxy
@@ -340,10 +336,10 @@ int main(int argc, char* argv[])
 			if ((vtProp.vt == VT_NULL) || (vtProp.vt == VT_EMPTY))
 				wcout << "Nazwa procesora : " << ((vtProp.vt == VT_NULL) ? "NULL" : "EMPTY") << endl;
 			else
-				if ((vtProp.vt & VT_ARRAY))
-					wcout << "Nazwa procesora : " << "Array types not supported (yet)" << endl;
-				else
-					wcout << "Nazwa procesora : " << vtProp.bstrVal << endl;
+			if ((vtProp.vt & VT_ARRAY))
+				wcout << "Nazwa procesora : " << "Array types not supported (yet)" << endl;
+			else
+				wcout << "Nazwa procesora : " << vtProp.bstrVal << endl;
 		}
 		VariantClear(&vtProp);
 
@@ -353,10 +349,10 @@ int main(int argc, char* argv[])
 			if ((vtProp.vt == VT_NULL) || (vtProp.vt == VT_EMPTY))
 				wcout << "Liczba rdzeni : " << ((vtProp.vt == VT_NULL) ? "NULL" : "EMPTY") << endl;
 			else
-				if ((vtProp.vt & VT_ARRAY))
-					wcout << "Liczba rdzeni : " << "Array types not supported (yet)" << endl;
-				else
-					wcout << "Liczba rdzeni : " << vtProp.uintVal << endl;
+			if ((vtProp.vt & VT_ARRAY))
+				wcout << "Liczba rdzeni : " << "Array types not supported (yet)" << endl;
+			else
+				wcout << "Liczba rdzeni : " << vtProp.uintVal << endl;
 		}
 		VariantClear(&vtProp);
 
@@ -366,10 +362,10 @@ int main(int argc, char* argv[])
 			if ((vtProp.vt == VT_NULL) || (vtProp.vt == VT_EMPTY))
 				wcout << "Liczba watkow : " << ((vtProp.vt == VT_NULL) ? "NULL" : "EMPTY") << endl;
 			else
-				if ((vtProp.vt & VT_ARRAY))
-					wcout << "Liczba watkow : " << "Array types not supported (yet)" << endl;
-				else
-					wcout << "Liczba watkow : " << vtProp.uintVal << endl;
+			if ((vtProp.vt & VT_ARRAY))
+				wcout << "Liczba watkow : " << "Array types not supported (yet)" << endl;
+			else
+				wcout << "Liczba watkow : " << vtProp.uintVal << endl;
 
 		}
 
@@ -388,64 +384,59 @@ int main(int argc, char* argv[])
 				//uruchomienie wątku
 				_beginthread(myFunction, 0, 0);
 				_beginthread(myFunction1, 0, 0);
-				_beginthread(myFunction2, 0, 0);
 				// I wątek dla obciążenia procesora
-				_beginthread(myFunction3, 0, 0);
+				_beginthread(myFunction2, 0, 0);
 			}
 			if (liczba == 2) {
 				//uruchomienie wątku
 				_beginthread(myFunction, 0, 0);
 				_beginthread(myFunction1, 0, 0);
-				_beginthread(myFunction2, 0, 0);
 				// I wątek dla obciążenia procesora
-				_beginthread(myFunction3, 0, 0);
+				_beginthread(myFunction2, 0, 0);
 				// II wątek dla obciążenia procesora
-				_beginthread(myFunction3, 0, 0);
+				_beginthread(myFunction2, 0, 0);
 			}
 			if (liczba == 3) {
 				_beginthread(myFunction, 0, 0);
 				_beginthread(myFunction1, 0, 0);
-				_beginthread(myFunction2, 0, 0);
 				// I wątek dla obciążenia procesora
-				_beginthread(myFunction3, 0, 0);
+				_beginthread(myFunction2, 0, 0);
 				// II wątek dla obciążenia procesora
-				_beginthread(myFunction3, 0, 0);
+				_beginthread(myFunction2, 0, 0);
 				// III wątek dla obciążenia procesora
-				_beginthread(myFunction3, 0, 0);
+				_beginthread(myFunction2, 0, 0);
 			}
 			if (liczba == 4) {
 				_beginthread(myFunction, 0, 0);
 				_beginthread(myFunction1, 0, 0);
-				_beginthread(myFunction2, 0, 0);
 				// I wątek dla obciążenia procesora
-				_beginthread(myFunction3, 0, 0);
+				_beginthread(myFunction2, 0, 0);
 				// II wątek dla obciążenia procesora
-				_beginthread(myFunction3, 0, 0);
+				_beginthread(myFunction2, 0, 0);
 				// III wątek dla obciążenia procesora
-				_beginthread(myFunction3, 0, 0);
+				_beginthread(myFunction2, 0, 0);
 				// IV wątek dla obciążenia procesora
-				_beginthread(myFunction3, 0, 0);
+				_beginthread(myFunction2, 0, 0);
 			}
 			if (liczba == 8) {
 				_beginthread(myFunction, 0, 0);
 				_beginthread(myFunction1, 0, 0);
-				_beginthread(myFunction2, 0, 0);
 				// I wątek dla obciążenia procesora
-				_beginthread(myFunction3, 0, 0);
+				_beginthread(myFunction2, 0, 0);
 				// II wątek dla obciążenia procesora
-				_beginthread(myFunction3, 0, 0);
+				_beginthread(myFunction2, 0, 0);
 				// III wątek dla obciążenia procesora
-				_beginthread(myFunction3, 0, 0);
+				_beginthread(myFunction2, 0, 0);
 				// IV wątek dla obciążenia procesora
-				_beginthread(myFunction3, 0, 0);
+				_beginthread(myFunction2, 0, 0);
 				// V wątek dla obciążenia procesora
-				_beginthread(myFunction3, 0, 0);
+				_beginthread(myFunction2, 0, 0);
 				// VI wątek dla obciążenia procesora
-				_beginthread(myFunction3, 0, 0);
+				_beginthread(myFunction2, 0, 0);
 				// VII wątek dla obciążenia procesora
-				_beginthread(myFunction3, 0, 0);
+				_beginthread(myFunction2, 0, 0);
 				// VIII wątek dla obciążenia procesora
-				_beginthread(myFunction3, 0, 0);
+				_beginthread(myFunction2, 0, 0);
 			}
 		}
 		else
@@ -478,4 +469,3 @@ int main(int argc, char* argv[])
 
 
 }
-
