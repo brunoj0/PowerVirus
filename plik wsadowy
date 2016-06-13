@@ -1,0 +1,15 @@
+@echo off 
+
+cd "C:\Users\X201\Documents\Visual Studio 2013\Projects\projektAK\Release" 
+start projektAK.exe 
+
+timeout /t 120 /nobreak
+
+cd "C:\AKP\TESTERY" 
+start HWiNFO64.exe 
+
+timeout /t 600 /nobreak
+
+nircmd.exe savescreenshot "C:\AKP\Test1Nasz.png"
+
+exit
